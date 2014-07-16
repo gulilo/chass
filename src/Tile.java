@@ -11,8 +11,9 @@ public class Tile extends JPanel {
 
 	private int num;
 	private Piece piece;
+	private Color c;
 
-	public Tile(Dimension size, Point loc,final Board b, Piece p, final int num)
+	public Tile(Dimension size, Point loc,final Board b, Piece p, final int num, Color c)
 	{
 		super();
 		setSize(size);
@@ -20,6 +21,7 @@ public class Tile extends JPanel {
 		setBackground(new Color(0, 0, 0, 0));
 		piece = p;
 		this.num = num;
+		this.c = c;
 		addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -73,18 +75,11 @@ public class Tile extends JPanel {
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		if(num %2 ==0)
-		{
-			g.setColor(Color.LIGHT_GRAY);
-		}
-		else
-		{
-			g.setColor(Color.DARK_GRAY);
-		}
+		g.setColor(c);
 		g.fillRect(getLocation().x,getLocation().y,getSize().width-2,getSize().height-2);
 		if(piece != null)
 		{
-			piece.setImage(changeColor(piece.getImage(), Color.WHITE, num % 2 == 0 ? Color.LIGHT_GRAY : Color.DARK_GRAY));
+			piece.setImage(changeColor(piece.getImage(), Color.WHITE, c));
 			g.drawImage(piece.getImage(),getLocation().x,getLocation().y,getSize().width-2,getSize().height-2,null);
 		}
 	}

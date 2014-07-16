@@ -17,6 +17,6 @@ public class Bishop extends Piece
 	@Override
 	public boolean move(int tx, int ty,int ox,int oy)
 	{
-		return tx - ox == ty - oy;
+		return Math.abs(tx - ox) == Math.abs(ty - oy);
 	}
 }

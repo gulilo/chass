@@ -3,6 +3,8 @@ import java.awt.*;
 
 public class Board
 {
+	private final Color DARK = new Color(150,75,0);
+	private final Color LIGHT = new Color(200,100,0);
 	private final int BOARD_SIZE = 8;
 	private Tile tiles[][];
 	private Tile selected;
@@ -11,17 +13,19 @@ public class Board
 	{
 		selected = null;
 		tiles = new Tile[BOARD_SIZE][BOARD_SIZE];
-		int counter = 0;
+		int counter = 0,num = 0;
 		for(int i = 0;i<BOARD_SIZE;i++)
 		{
 			for(int j = 0;j<BOARD_SIZE;j++)
 			{
 				Point START_POINT = new Point(50, 50);
-				tiles[j][i] = new Tile(new Dimension(tileSize,tileSize),new Point(START_POINT.x+(i*tileSize), START_POINT.y+(j*tileSize)),this, null,counter);
+				tiles[i][j] = new Tile(new Dimension(tileSize,tileSize),new Point(START_POINT.x+(j*tileSize), START_POINT.y+(i*tileSize)),this, null,counter,num%2==0?LIGHT:DARK);
 				counter++;
+				num++;
 			}
+			num++;
 		}
-		tiles[3][3].setPiece(new Bishop());
+		tiles[3][4].setPiece(new Bishop());
 	}
 
 	public void addBoard(JPanel p)
@@ -44,7 +48,7 @@ public class Board
 			for(int j = 0;j<tiles[i].length;j++)
 			{
 				Tile t = tiles[i][j];
-				t.paintComponent(g);
+				//t.paintComponent(g);
 			}
 		}
 		if(selected!= null)
@@ -58,26 +62,22 @@ public class Board
 	{
 		int i = num/8;
 		int j = num%8;
-		System.out.println(num+" "+i+" "+j);
 		Tile t = tiles[i][j];
-		if(selected == null)
+		if(selected == null || selected.getPiece()== null)
 		{
 			selected = t;
 		}
 		else
 		{
-			if(selected.getPiece() != null)
+			if (selected.getPiece().move(i, j, selected.getNum() / 8, selected.getNum() % 8))
 			{
-				if (selected.getPiece().move(i, j, selected.getNum() / 8, selected.getNum() % 8))
-				{
-					t.setPiece(selected.getPiece());
-					selected.setPiece(null);
-					selected = null;
-				}
-				else
-				{
-					selected = t;
-				}
+				t.setPiece(selected.getPiece());
+				selected.setPiece(null);
+				selected = null;
+			}
+			else
+			{
+				selected = t;
 			}
 		}
 	}
