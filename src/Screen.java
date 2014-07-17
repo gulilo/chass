@@ -116,6 +116,7 @@ public class Screen extends JFrame
         {
             System.out.println("cant reed file");
             e.printStackTrace();
+
         }
         setSize(size);
         setLocation(loc);
