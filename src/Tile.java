@@ -9,6 +9,7 @@ import java.awt.image.RGBImageFilter;
 
 public class Tile extends JPanel {
 
+	private boolean highlighted;
 	private int num;
 	private Piece piece;
 	private Color c;
@@ -22,6 +23,7 @@ public class Tile extends JPanel {
 		piece = p;
 		this.num = num;
 		this.c = c;
+		highlighted = false;
 		addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -72,10 +74,16 @@ public class Tile extends JPanel {
 		return Toolkit.getDefaultToolkit().createImage(ip);
 	}
 
-	public void paintComponent(Graphics g)
+	public void paintTile(Graphics g)
 	{
-		super.paintComponent(g);
-		g.setColor(c);
+		if(highlighted)
+		{
+			g.setColor(Color.BLUE);
+		}
+		else
+		{
+			g.setColor(c);
+		}
 		g.fillRect(getLocation().x,getLocation().y,getSize().width-2,getSize().height-2);
 		if(piece != null)
 		{
@@ -94,5 +102,9 @@ public class Tile extends JPanel {
 
 	public int getNum() {
 		return num;
+	}
+
+	public void setHighlighted(boolean highlighted) {
+		this.highlighted = highlighted;
 	}
 }

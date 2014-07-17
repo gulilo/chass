@@ -25,7 +25,7 @@ public class Board
 			}
 			num++;
 		}
-		tiles[3][4].setPiece(new Bishop());
+		tiles[3][3].setPiece(new Bishop());
 	}
 
 	public void addBoard(JPanel p)
@@ -48,7 +48,7 @@ public class Board
 			for(int j = 0;j<tiles[i].length;j++)
 			{
 				Tile t = tiles[i][j];
-				//t.paintComponent(g);
+				t.paintTile(g);
 			}
 		}
 		if(selected!= null)
@@ -63,21 +63,47 @@ public class Board
 		int i = num/8;
 		int j = num%8;
 		Tile t = tiles[i][j];
-		if(selected == null || selected.getPiece()== null)
+		if(selected == null && t.getPiece() != null)
 		{
 			selected = t;
+			highlight();
+		}
+		else if(selected != null)
+		{
+			if(t != selected)
+			{
+				if (selected.getPiece().move(i, j, selected.getNum() / 8, selected.getNum() % 8))
+				{
+					t.setPiece(selected.getPiece());
+					selected.setPiece(null);
+				}
+			}
+			selected = null;
+			highlight();
+		}
+	}
+
+	private void highlight()
+	{
+		if(selected == null)
+		{
+			for(int i = 0;i<tiles.length;i++)
+			{
+				for(int j = 0;j<tiles[i].length;j++)
+				{
+					tiles[i][j].setHighlighted(false);
+				}
+			}
 		}
 		else
 		{
-			if (selected.getPiece().move(i, j, selected.getNum() / 8, selected.getNum() % 8))
-			{
-				t.setPiece(selected.getPiece());
-				selected.setPiece(null);
-				selected = null;
-			}
-			else
-			{
-				selected = t;
+			for (int i = 0; i < tiles.length; i++) {
+				for (int j = 0; j < tiles[i].length; j++) {
+					if(selected.getPiece().move(i,j,selected.getNum()/8,selected.getNum()%8))
+					{
+						tiles[i][j].setHighlighted(true);
+					}
+				}
 			}
 		}
 	}
