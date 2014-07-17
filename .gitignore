@@ -1,0 +1,12 @@
+*.class
+*.out
+
+*~
+*.lock
+*.DS_Store
+*.swp
+
+# Intellij
+.idea/
+*.iml
+*.iws
