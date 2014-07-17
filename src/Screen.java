@@ -25,7 +25,6 @@ public class Screen extends JFrame
                close();
             }
         });
-        readStatus();
         setResizable(false);
         setUndecorated(false);
         setLayout(null);
@@ -49,10 +48,6 @@ public class Screen extends JFrame
                 }
             }
         });
-	    ContentPane p = new ContentPane(getSize());
-	    setContentPane(p);
-        setVisible(true);
-        open = true;
     }
 
     private void saveStatus() {
@@ -114,13 +109,21 @@ public class Screen extends JFrame
         }
         catch (IOException e)
         {
-            System.out.println("cant reed file");
-            e.printStackTrace();
-
+            System.out.println("cant reed file, using default");
         }
         setSize(size);
         setLocation(loc);
     }
+
+    public void open()
+    {
+        open = true;
+        setVisible(true);
+        readStatus();
+        ContentPane p = new ContentPane(getSize());
+        setContentPane(p);
+    }
+
 
     public void close()
     {

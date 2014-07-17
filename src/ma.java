@@ -2,6 +2,7 @@ public class ma {
     public static void main(String[]arr)
     {
         Screen s = new Screen();
+        s.open();
 	    while(s.isOpen())
 	    {
 		    s.repaint();

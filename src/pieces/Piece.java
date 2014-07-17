@@ -1,3 +1,5 @@
+package pieces;
+
 import java.awt.*;
 
 public abstract class Piece

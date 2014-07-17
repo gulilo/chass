@@ -1,34 +1,41 @@
+import pieces.Bishop;
+import pieces.Rook;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class Board extends JPanel
 {
-	private final Color DARK = new Color(150,75,0);
-	private final Color LIGHT = new Color(200,100,0);
-	private final int BOARD_SIZE = 8;
-	private Tile tiles[][];
+    private Tile tiles[][];
 	private Tile selected;
 
-	public Board(Dimension size,Point loc, int tileSize) {
+	public Board(Dimension size,Point loc, int tileSize)
+	{
 		super();
 		setSize(size);
 		setLocation(loc);
 		setLayout(null);
+        //setBackground(Color.RED);
 
 		selected = null;
-		tiles = new Tile[BOARD_SIZE][BOARD_SIZE];
-		int counter = 0, num = 0;
+        int BOARD_SIZE = 8;
+        tiles = new Tile[BOARD_SIZE][BOARD_SIZE];
+        int counter = 0, num = 0;
 		for (int i = 0; i < BOARD_SIZE; i++) {
 			for (int j = 0; j < BOARD_SIZE; j++) {
-				Point START_POINT = new Point(50, 50);
-				tiles[i][j] = new Tile(new Dimension(tileSize, tileSize), new Point(START_POINT.x + (j * tileSize), START_POINT.y + (i * tileSize)), this, null, counter, num % 2 == 0 ? LIGHT : DARK);
+                Color LIGHT = new Color(200, 100, 0);
+                Color DARK = new Color(150, 75, 0);
+                tiles[i][j] = new Tile(new Dimension(tileSize-1, tileSize-1), new Point(j * tileSize, i * tileSize), this, null, counter, num % 2 == 0 ? LIGHT : DARK);
 				add(tiles[i][j]);
 				counter++;
 				num++;
 			}
 			num++;
 		}
-		tiles[3][3].setPiece(new Bishop());
+		tiles[0][0].setPiece(new Rook());
+		tiles[0][7].setPiece(new Rook());
+		tiles[0][2].setPiece(new Bishop());
+		tiles[0][5].setPiece(new Bishop());
 	}
 
 
