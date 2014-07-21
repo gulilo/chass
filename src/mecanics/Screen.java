@@ -1,3 +1,7 @@
+package mecanics;
+
+import panels.ContentPane;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
