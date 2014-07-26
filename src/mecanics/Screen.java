@@ -61,14 +61,13 @@ public class Screen extends JFrame
             FileWriter fw = new FileWriter(FILENAME);
             BufferedWriter bw = new BufferedWriter(fw);
 
-            bw.write("Screen_size "+d.width +" "+d.height+"\n");
+            bw.write("Screen_Size "+d.width +" "+d.height+"\n");
             bw.write("Screen_Location "+p.x +" "+p.y+"\n");
 
             bw.close();
             fw.close();
         } catch (IOException e) {
-            System.err.println("cant save\n");
-            e.printStackTrace();
+            System.err.println("cant save\n"+e.getMessage());
         }
     }
 
@@ -90,8 +89,7 @@ public class Screen extends JFrame
                     int height = Integer.parseInt(token.nextToken());
                     size = new Dimension(width, height);
                 } catch (NumberFormatException ex) {
-                    System.out.println("file corrupted");
-                    ex.printStackTrace();
+                    System.err.println("file corrupted, using default");
                 }
             }
 
@@ -104,8 +102,7 @@ public class Screen extends JFrame
                     int y = Integer.parseInt(token.nextToken());
                     loc = new Point(x, y);
                 } catch (NumberFormatException ex) {
-                    System.out.println("file corrupted");
-                    ex.printStackTrace();
+                    System.err.println("file corrupted, using default");
                 }
             }
             br.close();
@@ -113,7 +110,7 @@ public class Screen extends JFrame
         }
         catch (IOException e)
         {
-            System.out.println("cant reed file, using default");
+            System.err.println("cant reed file, using default");
         }
         setSize(size);
         setLocation(loc);
@@ -124,10 +121,8 @@ public class Screen extends JFrame
         open = true;
         setVisible(true);
         readStatus();
-        ContentPane p = new ContentPane(getSize());
-        setContentPane(p);
+        setContentPane(new ContentPane(getSize()));
     }
-
 
     public void close()
     {

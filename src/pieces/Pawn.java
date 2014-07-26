@@ -1,38 +1,35 @@
 package pieces;
 
 import mecanics.Player;
-import resorsces.Colors;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.io.File;
-import java.io.IOException;
 
 public class Pawn extends Piece
 {
 	protected Point[] attacks;
+	private boolean moved;
 
-	public Pawn(Player p,int n)
+	public Pawn(Player p)
 	{
 		super(p);
-
-		moves = new Point[1];
-		moves[0] = p.getNum()==0?new Point(1,0):new Point(-1,0);
+		moves = new Point[2];
+		moves[0] = p.getNum()==0?new Point(-1,0):new Point(1,0);
+		moves[1] = p.getNum()==0?new Point(-2,0):new Point(2,0);
 		attacks = new Point[2];
-		attacks[0] = p.getNum()==0?new Point(1,1):new Point(-1,-1);
-		attacks[1] = p.getNum()==0?new Point(1,-1):new Point(-1,1);
-
-		try {
-			image = ImageIO.read(new File("pic//Pawn.png"));
-			image = changeColor(image, Color.WHITE, new Color(0, 0, 0, 0));
-			image = changeColor(image, new Color(190,190,190), n % 2 == 0 ? Colors.PIECE_BLACK : Colors.PIECE_WHITE);
-		} catch (IOException e) {
-			System.err.println("cant read image");
-			image = null;
-		}
+		attacks[0] = p.getNum()==0?new Point(-1,-1):new Point(1,1);
+		attacks[1] = p.getNum()==0?new Point(-1,1):new Point(1,-1);
+		moved = false;
 	}
 
 	public Point[] getAttacks() {
 		return attacks;
+	}
+
+	public boolean isMoved() {
+		return moved;
+	}
+
+	public void setMoved(boolean moved) {
+		this.moved = moved;
 	}
 }

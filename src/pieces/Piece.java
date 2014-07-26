@@ -1,12 +1,16 @@
 package pieces;
 
 import mecanics.Player;
+import resorsces.Colors;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.ImageFilter;
 import java.awt.image.ImageProducer;
 import java.awt.image.RGBImageFilter;
+import java.io.File;
+import java.io.IOException;
 
 public abstract class Piece
 {
@@ -17,6 +21,14 @@ public abstract class Piece
 	public Piece(Player p)
 	{
 		player = p;
+		try {
+			image = ImageIO.read(new File("pic//" + getClass().getSimpleName() + ".png"));
+			image = changeColor(image, Color.WHITE, new Color(0, 0, 0, 0));
+			image = changeColor(image, new Color(190,190,190), p.getNum() % 2 == 0 ? Colors.PIECE_WHITE : Colors.PIECE_BLACK);
+		} catch (IOException e) {
+			System.err.println("cant read image");
+			image = null;
+		}
 	}
 
 	public static Image changeColor(Image image , final Color from , final Color to)
