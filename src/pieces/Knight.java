@@ -19,4 +19,9 @@ public class Knight extends Piece
 		moves[6] = new Point(1,-2);
 		moves[7] = new Point(-1,-2);
 	}
+
+	@Override
+	public boolean canMove(int from, int to) {
+		return Math.abs(from/8 - to/8)== 2 && Math.abs(from%8 - to%8)==1 || Math.abs(from/8 - to/8)== 1 && Math.abs(from%8 - to%8)==2;
+	}
 }

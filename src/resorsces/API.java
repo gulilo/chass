@@ -8,48 +8,36 @@ public class API {
 	private int turn;
 	private Board board;
 	private Core core;
+	private int selected;
 
 	public API(Board board, Core core)
 	{
 		turn = 0;
 		this.board = board;
 		this.core = core;
+		selected = -1;
 	}
 
 	public void click(int num)
 	{
-		int x = num/8;
-		int y = num%8;
-
-		if(board.getSelected() == null)
+		if(selected < 0)
 		{
-			if(board.getTiles()[x][y].getPiece() != null && board.getTiles()[x][y].getPiece().getPlayer() == core.getPlayers()[turn])
+			if(board.getPiece(num) != null && board.getPiece(num).getPlayer() == core.getPlayers()[turn])
 			{
-				if(board.getTiles()[x][y].getPiece() != null)
-				{
-					board.setSelected(board.getTiles()[x][y]);
-					board.setSx(x);
-					board.setSy(y);
-					board.highlight();
-				}
+				selected = num;
 			}
 		}
 		else
 		{
-			if(board.move(num))
+			if(board.movePiece(selected,num))
 			{
 				nextTurn();
-			}
-			board.setSelected(null);
-			board.setSy(-1);
-			board.setSx(-1);
-			board.highlight();
-		}
-		core.update();
-	}
 
-	public Board getBoard() {
-		return board;
+			}
+			selected = -1;
+		}
+		board.highlight(selected);
+		core.update();
 	}
 
 	public void nextTurn()
@@ -57,5 +45,9 @@ public class API {
 		turn = (turn+1)%2;
 		String s = turn==0?"White":"Black";
 		System.out.println("turn "+s);
+	}
+
+	public int getSelected() {
+		return selected;
 	}
 }

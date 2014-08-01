@@ -17,9 +17,11 @@ public abstract class Piece
 	protected Image image;
 	protected Point[] moves;
 	protected Player player;
+	protected boolean moved;
 
 	public Piece(Player p)
 	{
+		moved = false;
 		player = p;
 		try {
 			image = ImageIO.read(new File("pic//" + getClass().getSimpleName() + ".png"));
@@ -49,6 +51,8 @@ public abstract class Piece
 		return Toolkit.getDefaultToolkit().createImage(ip);
 	}
 
+	public abstract boolean canMove(int from, int to);
+
 	public Point[] getMoves() {
 		return moves;
 	}
@@ -59,5 +63,13 @@ public abstract class Piece
 
 	public Player getPlayer() {
 		return player;
+	}
+
+	public boolean isMoved() {
+		return moved;
+	}
+
+	public void setMoved(boolean moved) {
+		this.moved = moved;
 	}
 }

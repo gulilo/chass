@@ -6,10 +6,12 @@ public class Player
 {
 	private Piece[] pieces;
 	private Piece[] deads;
+	private int index;
 	private int num;
 
 	public Player(int num)
 	{
+		index = 0;
 		this.num = num;
 		pieces = new Piece[16];
 		pieces[4] = new King(this);
@@ -25,6 +27,18 @@ public class Player
 			pieces[i] = new Pawn(this);
 		}
 		deads = new Piece[16];
+	}
+
+	public void kill(Piece p)
+	{
+		for(int i = 0;i<pieces.length;i++)
+		{
+			if(pieces[i] == p)
+			{
+				pieces[i] = null;
+				deads[index++] = p;
+			}
+		}
 	}
 
 	public Piece[] getPieces() {

@@ -19,4 +19,9 @@ public class Queen extends Piece
 		moves[6] = new Point(1,-1);
 		moves[7] = new Point(-1,-1);
 	}
+
+	@Override
+	public boolean canMove(int from, int to) {
+		return Math.abs(from/8 - to/8)== 0 || Math.abs(from%8-to%8)==0 || Math.abs(from/8 - to/8) == Math.abs(from%8 - to%8);
+	}
 }
