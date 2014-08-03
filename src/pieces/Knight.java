@@ -10,18 +10,19 @@ public class Knight extends Piece
 	{
 		super(p);
 		moves = new Point[8];
-		moves[0] = new Point(2,1);
-		moves[1] = new Point(2,-1);
-		moves[2] = new Point(-2,1);
-		moves[3] = new Point(-2,-1);
-		moves[4] = new Point(1,2);
-		moves[5] = new Point(-1,2);
-		moves[6] = new Point(1,-2);
-		moves[7] = new Point(-1,-2);
+		moves[0] = new Point(2, 1);
+		moves[1] = new Point(2, -1);
+		moves[2] = new Point(-2, 1);
+		moves[3] = new Point(-2, -1);
+		moves[4] = new Point(1, 2);
+		moves[5] = new Point(-1, 2);
+		moves[6] = new Point(1, -2);
+		moves[7] = new Point(-1, -2);
 	}
 
 	@Override
-	public boolean canMove(int from, int to) {
-		return Math.abs(from/8 - to/8)== 2 && Math.abs(from%8 - to%8)==1 || Math.abs(from/8 - to/8)== 1 && Math.abs(from%8 - to%8)==2;
+	public boolean canMove(int from, int to)
+	{
+		return Math.abs(from / 8 - to / 8) == 2 && Math.abs(from % 8 - to % 8) == 1 || Math.abs(from / 8 - to / 8) == 1 && Math.abs(from % 8 - to % 8) == 2;
 	}
 }

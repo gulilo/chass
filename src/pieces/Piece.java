@@ -23,22 +23,25 @@ public abstract class Piece
 	{
 		moved = false;
 		player = p;
-		try {
+		try
+		{
 			image = ImageIO.read(new File("pic//" + getClass().getSimpleName() + ".png"));
 			image = changeColor(image, Color.WHITE, new Color(0, 0, 0, 0));
-			image = changeColor(image, new Color(190,190,190), p.getNum() % 2 == 0 ? Colors.PIECE_WHITE : Colors.PIECE_BLACK);
-		} catch (IOException e) {
+			image = changeColor(image, new Color(190, 190, 190), p.getNum() % 2 == 0 ? Colors.PIECE_WHITE : Colors.PIECE_BLACK);
+		}
+		catch(IOException e)
+		{
 			System.err.println("cant read image");
 			image = null;
 		}
 	}
 
-	public static Image changeColor(Image image , final Color from , final Color to)
+	public static Image changeColor(Image image, final Color from, final Color to)
 	{
 		ImageFilter filter = new RGBImageFilter()
 		{
 			@Override
-			public int filterRGB(int x , int y , int rgb)
+			public int filterRGB(int x, int y, int rgb)
 			{
 				if(rgb == from.getRGB())
 				{
@@ -47,29 +50,34 @@ public abstract class Piece
 				return rgb;
 			}
 		};
-		ImageProducer ip = new FilteredImageSource(image.getSource() , filter);
+		ImageProducer ip = new FilteredImageSource(image.getSource(), filter);
 		return Toolkit.getDefaultToolkit().createImage(ip);
 	}
 
 	public abstract boolean canMove(int from, int to);
 
-	public Point[] getMoves() {
+	public Point[] getMoves()
+	{
 		return moves;
 	}
 
-	public Image getImage() {
+	public Image getImage()
+	{
 		return image;
 	}
 
-	public Player getPlayer() {
+	public Player getPlayer()
+	{
 		return player;
 	}
 
-	public boolean isMoved() {
+	public boolean isMoved()
+	{
 		return moved;
 	}
 
-	public void setMoved(boolean moved) {
+	public void setMoved(boolean moved)
+	{
 		this.moved = moved;
 	}
 }

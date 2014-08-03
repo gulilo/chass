@@ -22,7 +22,7 @@ public class Player
 		pieces[1] = new Knight(this);
 		pieces[2] = new Bishop(this);
 		pieces[5] = new Bishop(this);
-		for(int i = 8;i<pieces.length;i++)
+		for(int i = 8; i < pieces.length; i++)
 		{
 			pieces[i] = new Pawn(this);
 		}
@@ -31,7 +31,7 @@ public class Player
 
 	public void kill(Piece p)
 	{
-		for(int i = 0;i<pieces.length;i++)
+		for(int i = 0; i < pieces.length; i++)
 		{
 			if(pieces[i] == p)
 			{
@@ -41,19 +41,23 @@ public class Player
 		}
 	}
 
-	public Piece[] getPieces() {
+	public Piece[] getPieces()
+	{
 		return pieces;
 	}
 
-	public Piece[] getDeads() {
+	public Piece[] getDeads()
+	{
 		return deads;
 	}
 
-	public void setDeads(Piece[] deads) {
+	public void setDeads(Piece[] deads)
+	{
 		this.deads = deads;
 	}
 
-	public int getNum() {
+	public int getNum()
+	{
 		return num;
 	}
 }

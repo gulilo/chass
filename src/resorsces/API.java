@@ -3,7 +3,8 @@ package resorsces;
 import mecanics.Core;
 import panels.Board;
 
-public class API {
+public class API
+{
 
 	private int turn;
 	private Board board;
@@ -26,10 +27,9 @@ public class API {
 			{
 				selected = num;
 			}
-		}
-		else
+		} else
 		{
-			if(board.movePiece(selected,num))
+			if(board.movePiece(selected, num))
 			{
 				nextTurn();
 
@@ -42,12 +42,13 @@ public class API {
 
 	public void nextTurn()
 	{
-		turn = (turn+1)%2;
-		String s = turn==0?"White":"Black";
-		System.out.println("turn "+s);
+		turn = (turn + 1) % 2;
+		String s = turn == 0 ? "White" : "Black";
+		System.out.println("turn " + s);
 	}
 
-	public int getSelected() {
+	public int getSelected()
+	{
 		return selected;
 	}
 }

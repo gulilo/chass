@@ -9,13 +9,14 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class Tile extends JPanel {
+public class Tile extends JPanel
+{
 
 	private boolean highlighted;
 	private int num;
 	private Piece piece;
 
-	public Tile(Dimension size, Point loc,final Board b, final int num)
+	public Tile(Dimension size, Point loc, final Board b, final int num)
 	{
 		super();
 		setSize(size);
@@ -24,13 +25,16 @@ public class Tile extends JPanel {
 
 		this.num = num;
 		highlighted = false;
-		addMouseListener(new MouseListener() {
+		addMouseListener(new MouseListener()
+		{
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(MouseEvent e)
+			{
 				e.consume();
 			}
 
-			public void mousePressed(MouseEvent e) {
+			public void mousePressed(MouseEvent e)
+			{
 				if(e.getButton() == MouseEvent.BUTTON1)
 				{
 					Core.api.click(num);
@@ -39,17 +43,20 @@ public class Tile extends JPanel {
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent e) {
+			public void mouseReleased(MouseEvent e)
+			{
 				e.consume();
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {
+			public void mouseEntered(MouseEvent e)
+			{
 				e.consume();
 			}
 
 			@Override
-			public void mouseExited(MouseEvent e) {
+			public void mouseExited(MouseEvent e)
+			{
 				e.consume();
 			}
 		});
@@ -58,45 +65,42 @@ public class Tile extends JPanel {
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D)g;
+		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(3));
 		if(highlighted)
 		{
 			g2.setColor(Color.BLUE);
-		}
-		else
+		} else
 		{
-			int x = num/8;
-			int y = num%8;
-			if(x%2 == y%2)
+			int x = num / 8;
+			int y = num % 8;
+			if(x % 2 == y % 2)
 			{
 				g2.setColor(Colors.TILE_LIGHT);
-			}
-			else
+			} else
 			{
 				g2.setColor(Colors.TILE_DARK);
 			}
 		}
-		g2.fillRect(0,0,getSize().width,getSize().height);
+		g2.fillRect(0, 0, getSize().width, getSize().height);
 		if(piece != null)
 		{
 			if(piece.getImage() == null)
 			{
 				g2.setColor(Color.GREEN);
-				g2.fillRect(0,0,getSize().width,getSize().height);
-			}
-			else
+				g2.fillRect(0, 0, getSize().width, getSize().height);
+			} else
 			{
-				g2.drawImage(piece.getImage(),0,0,getSize().width,getSize().height,null);
+				g2.drawImage(piece.getImage(), 0, 0, getSize().width, getSize().height, null);
 			}
 		}
 		if(num == Core.api.getSelected())
 		{
 			g2.setColor(Color.CYAN);
-			g2.drawRect(0,0,getSize().width-1,getSize().height-1);
+			g2.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
 		}
 		g2.setColor(Color.yellow);
-		g2.drawString(""+num,20,20);
+		g2.drawString("" + num, 20, 20);
 	}
 
 	public boolean isEmpty()
@@ -104,11 +108,13 @@ public class Tile extends JPanel {
 		return piece == null;
 	}
 
-	public Piece getPiece() {
+	public Piece getPiece()
+	{
 		return piece;
 	}
 
-	public void setPiece(Piece piece) {
+	public void setPiece(Piece piece)
+	{
 		this.piece = piece;
 	}
 

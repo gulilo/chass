@@ -10,18 +10,19 @@ public class Queen extends Piece
 	{
 		super(p);
 		moves = new Point[8];
-		moves[0] = new Point(1,0);
-		moves[1] = new Point(0,1);
-		moves[2] = new Point(-1,0);
-		moves[3] = new Point(0,-1);
-		moves[4] = new Point(1,1);
-		moves[5] = new Point(-1,1);
-		moves[6] = new Point(1,-1);
-		moves[7] = new Point(-1,-1);
+		moves[0] = new Point(1, 0);
+		moves[1] = new Point(0, 1);
+		moves[2] = new Point(-1, 0);
+		moves[3] = new Point(0, -1);
+		moves[4] = new Point(1, 1);
+		moves[5] = new Point(-1, 1);
+		moves[6] = new Point(1, -1);
+		moves[7] = new Point(-1, -1);
 	}
 
 	@Override
-	public boolean canMove(int from, int to) {
-		return Math.abs(from/8 - to/8)== 0 || Math.abs(from%8-to%8)==0 || Math.abs(from/8 - to/8) == Math.abs(from%8 - to%8);
+	public boolean canMove(int from, int to)
+	{
+		return Math.abs(from / 8 - to / 8) == 0 || Math.abs(from % 8 - to % 8) == 0 || Math.abs(from / 8 - to / 8) == Math.abs(from % 8 - to % 8);
 	}
 }
