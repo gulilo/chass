@@ -12,7 +12,7 @@ import java.awt.event.MouseListener;
 public class Tile extends JPanel
 {
 
-	private boolean highlighted;
+	private Color highlighted;
 	private int num;
 	private Piece piece;
 
@@ -24,7 +24,7 @@ public class Tile extends JPanel
 		setLayout(null);
 
 		this.num = num;
-		highlighted = false;
+		highlighted = null;
 		addMouseListener(new MouseListener()
 		{
 			@Override
@@ -67,17 +67,19 @@ public class Tile extends JPanel
 		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(3));
-		if(highlighted)
+		if(highlighted != null)
 		{
-			g2.setColor(Color.BLUE);
-		} else
+			g2.setColor(highlighted);
+		}
+		else
 		{
 			int x = num / 8;
 			int y = num % 8;
 			if(x % 2 == y % 2)
 			{
 				g2.setColor(Colors.TILE_LIGHT);
-			} else
+			}
+			else
 			{
 				g2.setColor(Colors.TILE_DARK);
 			}
@@ -89,7 +91,8 @@ public class Tile extends JPanel
 			{
 				g2.setColor(Color.GREEN);
 				g2.fillRect(0, 0, getSize().width, getSize().height);
-			} else
+			}
+			else
 			{
 				g2.drawImage(piece.getImage(), 0, 0, getSize().width, getSize().height, null);
 			}
@@ -118,7 +121,7 @@ public class Tile extends JPanel
 		this.piece = piece;
 	}
 
-	public void setHighlighted(boolean highlighted)
+	public void setHighlighted(Color highlighted)
 	{
 		this.highlighted = highlighted;
 	}

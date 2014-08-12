@@ -1,6 +1,8 @@
 package pieces;
 
 import mecanics.Player;
+import moves.Move;
+import panels.Tile;
 import resorsces.Colors;
 
 import javax.imageio.ImageIO;
@@ -11,11 +13,11 @@ import java.awt.image.ImageProducer;
 import java.awt.image.RGBImageFilter;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public abstract class Piece
 {
 	protected Image image;
-	protected Point[] moves;
 	protected Player player;
 	protected boolean moved;
 
@@ -54,11 +56,19 @@ public abstract class Piece
 		return Toolkit.getDefaultToolkit().createImage(ip);
 	}
 
-	public abstract boolean canMove(int from, int to);
+	public abstract ArrayList<Move> getMoves(int from, Tile[][] board);
 
-	public Point[] getMoves()
+	protected boolean isinside(int x, int y, int boardSize)
 	{
-		return moves;
+		//System.out.print(x+"   "+y);
+		boolean b = x >= 0 && x < boardSize && y >= 0 && y < boardSize;
+		//System.out.println("  "+b);
+		return b;
+	}
+
+	protected boolean canMove(Tile[][] board, int to)
+	{
+		return board[to/8][to%8].isEmpty() || board[to/8][to%8].getPiece().getPlayer() != player || board[to/8][to%8].getPiece()!= this;
 	}
 
 	public Image getImage()
@@ -76,8 +86,8 @@ public abstract class Piece
 		return moved;
 	}
 
-	public void setMoved(boolean moved)
+	public void move()
 	{
-		this.moved = moved;
+		moved = true;
 	}
 }

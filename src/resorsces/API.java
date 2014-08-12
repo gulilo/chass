@@ -27,12 +27,12 @@ public class API
 			{
 				selected = num;
 			}
-		} else
+		}
+		else
 		{
 			if(board.movePiece(selected, num))
 			{
 				nextTurn();
-
 			}
 			selected = -1;
 		}

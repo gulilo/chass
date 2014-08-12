@@ -1,20 +1,23 @@
 package panels;
 
 import mecanics.Player;
-import pieces.*;
+import moves.Check;
+import moves.Kill;
+import moves.Move;
+import moves.PieceMove;
+import pieces.Piece;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 
 public class Board extends JPanel
 {
-	private final int BOARD_SIZE = 8;
 
 	private Tile tiles[][];
-	private boolean wkcastling;
 
-	public Board(Dimension size, Point loc, int tileSize, Player[] p)
+	public Board(Dimension size, Point loc, int tileSize, Player[] players)
 	{
 		super();
 		setSize(size);
@@ -22,7 +25,7 @@ public class Board extends JPanel
 		setLayout(null);
 		setBackground(Color.ORANGE);
 
-		wkcastling = false;
+		int BOARD_SIZE = 8;
 		tiles = new Tile[BOARD_SIZE][BOARD_SIZE];
 		int counter = 0;
 		for(int i = 0; i < BOARD_SIZE; i++)
@@ -34,30 +37,14 @@ public class Board extends JPanel
 				counter++;
 			}
 		}
+		players[0].start(tiles);
+		players[1].start(tiles);
 
-		for(int i = 0; i < tiles.length; i++)
-		{
-			tiles[7][i].setPiece(p[0].getPieces()[i]);
-		}
-		for(int i = 0; i < tiles[1].length; i++)
-		{
-			tiles[6][i].setPiece(p[0].getPieces()[i + 8]);
-		}
-
-		for(int i = 0; i < tiles.length; i++)
-		{
-			tiles[0][i].setPiece(p[1].getPieces()[i]);
-		}
-		for(int i = 0; i < tiles[1].length; i++)
-		{
-			tiles[1][i].setPiece(p[1].getPieces()[i + 8]);
-		}
+		//tiles[3][4].setPiece(new Rook(players[0]));
+		//tiles[0][7].setPiece(new King(players[1]));
+		//tiles[2][4].setPiece(new Pawn(players[1]));
 	}
 
-	private boolean isinside(int x, int y)
-	{
-		return x >= 0 && x < BOARD_SIZE && y >= 0 && y < BOARD_SIZE;
-	}
 
 	public boolean movePiece(int from, int to)
 	{
@@ -69,197 +56,66 @@ public class Board extends JPanel
 		{
 			return false;
 		}
-		int[] arr = moves(from);
-		int index = 0;
-		boolean flag = true;
-		while(arr[index] >= 0 && index < arr.length && flag)
+
+		ArrayList<Move> arr = moves(from);
+		if(arr != null)
 		{
-			if(arr[index] == to)
+			for(Move move : arr)
 			{
-				flag = false;
-			} else
-			{
-				index++;
+				if(move.getNum() == to)
+				{
+					move.doit(tiles, from, to);
+					return true;
+				}
 			}
 		}
-		if(!flag)
-		{
-			Tile f = getTile(from);
-			Tile t = getTile(to);
-			//TODO better castling
-			if(f.getPiece() instanceof King && to == 62 && wkcastling)
-			{
-				f.getPiece().setMoved(true);
-				getTile(63).getPiece().setMoved(true);
-				t.setPiece(f.getPiece());
-				getTile(61).setPiece(getTile(63).getPiece());
-				f.setPiece(null);
-				getTile(63).setPiece(null);
-			} else if(t.getPiece() == null)
-			{
-				f.getPiece().setMoved(true);
-				t.setPiece(f.getPiece());
-				f.setPiece(null);
-			} else
-			{
-				f.getPiece().setMoved(true);
-				t.getPiece().getPlayer().kill(t.getPiece());
-				t.setPiece(f.getPiece());
-				f.setPiece(null);
-			}
-			return true;
-		}
+
 		return false;
 	}
 
 	public void highlight(int num)
 	{
-		int[] arr = moves(num);
+		ArrayList<Move> arr = moves(num);
 		if(arr == null)
 		{
 			for(Tile[] t : tiles)
 			{
 				for(Tile tile : t)
 				{
-					tile.setHighlighted(false);
+					tile.setHighlighted(null);
 				}
 			}
-		} else
+		}
+		else
 		{
-			int index = 0;
-			while(arr[index] >= 0 && index < arr.length)
+			for(Move move:arr)
 			{
-				getTile(arr[index++]).setHighlighted(true);
+				if(move instanceof PieceMove)
+				{
+					getTile(move.getNum()).setHighlighted(Color.BLUE);
+				}
+				else if(move instanceof Kill)
+				{
+					getTile(move.getNum()).setHighlighted(Color.RED);
+				}
+				else if(move instanceof Check)
+				{
+					getTile(move.getNum()).setHighlighted(Color.GREEN);
+				}
 			}
 		}
 	}
 
-	private int[] moves(int num)
+	private ArrayList<Move> moves(int num)
 	{
 		if(num < 0 || getTile(num).isEmpty())
 		{
 			return null;
-		} else
+		}
+		else
 		{
 			Piece p = getTile(num).getPiece();
-			int x = num / 8;
-			int y = num % 8;
-
-			//TODO better way to store moves
-			int[] ans = new int[64];
-			for(int i = 0; i < ans.length; i++)
-			{
-				ans[i] = -1;
-			}
-			int index = 0;
-
-			if(p instanceof Rook || p instanceof Bishop || p instanceof Queen)
-			{
-				boolean[] flags = new boolean[p.getMoves().length];
-				for(int i = 0; i < flags.length; i++)
-				{
-					flags[i] = true;
-				}
-				for(int i = 1; i < BOARD_SIZE; i++)
-				{
-					for(int j = 0; j < flags.length; j++)
-					{
-						if(flags[j])
-						{
-							if(isinside((int) (x + i * p.getMoves()[j].getX()), (int) (y + i * p.getMoves()[j].getY())))
-							{
-								if(tiles[(int) (x + i * p.getMoves()[j].getX())][(int) (y + i * p.getMoves()[j].getY())].getPiece() == null)
-								{
-									ans[index++] = (int) (x + i * p.getMoves()[j].getX()) * 8 + (int) (y + i * p.getMoves()[j].getY());
-								} else if(tiles[(int) (x + i * p.getMoves()[j].getX())][(int) (y + i * p.getMoves()[j].getY())].getPiece().getPlayer() != p.getPlayer())
-								{
-									ans[index++] = (int) (x + i * p.getMoves()[j].getX()) * 8 + (int) (y + i * p.getMoves()[j].getY());
-									flags[j] = false;
-								} else
-								{
-									flags[j] = false;
-								}
-							} else
-							{
-								flags[j] = false;
-							}
-						}
-					}
-				}
-			} else if(p instanceof King || p instanceof Knight)
-			{
-				for(int j = 0; j < p.getMoves().length; j++)
-				{
-					if(isinside((int) (x + p.getMoves()[j].getX()), (int) (y + p.getMoves()[j].getY())))
-					{
-						if(tiles[(int) (x + p.getMoves()[j].getX())][(int) (y + p.getMoves()[j].getY())].getPiece() == null)
-						{
-							ans[index++] = (int) (x + p.getMoves()[j].getX()) * 8 + (int) (y + p.getMoves()[j].getY());
-						} else if(tiles[(int) (x + p.getMoves()[j].getX())][(int) (y + p.getMoves()[j].getY())].getPiece().getPlayer() != p.getPlayer())
-						{
-							ans[index++] = (int) (x + p.getMoves()[j].getX()) * 8 + (int) (y + p.getMoves()[j].getY());
-						}
-					}
-				}
-				if(p instanceof King) //castling
-				{
-					if(!p.isMoved())
-					{
-						if(!getTile(63).isEmpty() && !getTile(63).getPiece().isMoved())
-						{
-							if(getTile(61).isEmpty() && getTile(62).isEmpty())
-							{
-								ans[index++] = 62;
-								wkcastling = true;
-							} else
-							{
-								wkcastling = false;
-							}
-						} else
-						{
-							wkcastling = false;
-						}
-						if(!getTile(56).isEmpty() && !getTile(56).getPiece().isMoved())
-						{
-							if(getTile(58).isEmpty() && getTile(57).isEmpty() && getTile(56).isEmpty())
-							{
-								ans[index++] = 57;
-							}
-						}
-					} else
-					{
-						wkcastling = false;
-					}
-				}
-			} else if(p instanceof Pawn)
-			{
-				Pawn p2 = (Pawn) p;
-				if(isinside((int) (x + p.getMoves()[0].getX()), (int) (y + p.getMoves()[0].getY())))
-				{
-					if(tiles[(int) (x + p.getMoves()[0].getX())][(int) (y + p.getMoves()[0].getY())].getPiece() == null)
-					{
-						ans[index++] = (int) (x + p.getMoves()[0].getX()) * 8 + (int) (y + p.getMoves()[0].getY());
-					}
-					if(!p2.isMoved())
-					{
-						if(tiles[(int) (x + p.getMoves()[1].getX())][(int) (y + p.getMoves()[1].getY())].getPiece() == null)
-						{
-							ans[index++] = (int) (x + p.getMoves()[1].getX()) * 8 + (int) (y + p.getMoves()[1].getY());
-						}
-					}
-					for(int i = 0; i < p2.getAttacks().length; i++)
-					{
-						if(isinside((int) (x + p2.getAttacks()[i].getX()), (int) (y + p2.getAttacks()[i].getY())))
-						{
-							if(tiles[(int) (x + p2.getAttacks()[i].getX())][(int) (y + p2.getAttacks()[i].getY())].getPiece() != null && tiles[(int) (x + p2.getAttacks()[i].getX())][(int) (y + p2.getAttacks()[i].getY())].getPiece().getPlayer() != p2.getPlayer())
-							{
-								ans[index++] = (int) (x + p2.getAttacks()[i].getX()) * 8 + (int) (y + p2.getAttacks()[i].getY());
-							}
-						}
-					}
-				}
-			}
-			return ans;
+			return p.getMoves(num, tiles);
 		}
 	}
 
