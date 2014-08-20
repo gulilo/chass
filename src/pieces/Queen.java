@@ -1,57 +1,98 @@
 package pieces;
 
 import mecanics.Player;
+import moves.Check;
 import moves.Kill;
 import moves.Move;
 import moves.PieceMove;
+import panels.Board;
 import panels.Tile;
 
 import java.util.ArrayList;
 
 public class Queen extends Piece
 {
-	public Queen(Player p)
+	public Queen(Player p, int loc)
 	{
-		super(p);
+		super(p, loc);
+		code = 'Q';
 	}
 
 	@Override
-	public ArrayList<Move> getMoves(int from, Tile[][] board)
+	public ArrayList<Move> getMoves(Tile[][] board)
 	{
 		ArrayList<Move> moves = new ArrayList<Move>();
 
-		int x = from / 8;
-		int y = from % 8;
+		ArrayList<Integer> a = getTilesNumbers(board, loc);
 
-		int[][] m = {{1, -1, 0, 0, 1, 1, -1, -1}, {0, 0, 1, -1, 1, -1, 1, -1}};
-		boolean[] flags = {true, true, true, true, true, true, true, true};
-
-		for(int i = 1; i < board.length; i++)
+		for(Integer num:a)
 		{
-			for(int j = 0; j < flags.length; j++)
+			if(isCheck(board,num))
 			{
-				if(flags[j])
+				moves.add(new Check(loc,num));
+			}
+			else if(Board.getTile(num, board).isEmpty())
+			{
+				moves.add(new PieceMove(loc,num));
+			}
+			else
+			{
+				moves.add(new Kill(loc,num));
+			}
+		}
+		return moves;
+	}
+
+	private boolean isCheck(Tile[][] board, int num)
+	{
+		ArrayList<Integer> a = getTilesNumbers(board, num);
+
+		for(Integer i:a)
+		{
+			if(!Board.getTile(i,board).isEmpty() && Board.getTile(i,board).getPiece().getPlayer() != player && Board.getTile(i,board).getPiece() instanceof King)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	private ArrayList<Integer> getTilesNumbers(Tile[][] board, int num)
+	{
+		int[][] m = {{1, -1, 0, 0, 1, 1, -1, -1}, {0, 0, 1, -1, 1, -1, 1, -1}};
+		ArrayList<Integer> a = new ArrayList<Integer>();
+
+		int x = num / 8;
+		int y = num % 8;
+
+		for (int i = 0; i < m[0].length; i++)
+		{
+			boolean flag = true;
+			for (int j = 1; j < board.length && flag; j++)
+			{
+				if (isInside(x + j * m[0][i], y + j * m[1][i], 8))
 				{
-					if(isinside(x + i * m[0][j], y + i * m[1][j], 8))
+					if (canMove(board, (x + j * m[0][i]) * 8 + y + j * m[1][i]))
 					{
-						if(board[x + i * m[0][j]][y + i * m[1][j]].isEmpty())
+						a.add((x + j * m[0][i]) * 8 + y + j * m[1][i]);
+						if(!board[x + j * m[0][i]][y + j * m[1][i]].isEmpty() && board[x + j * m[0][i]][y + j * m[1][i]].getPiece().getPlayer() != player)
 						{
-							moves.add(new PieceMove((x + i * m[0][j]) * 8 + (y + i * m[1][j])));
-						}
-						else if(board[x + i * m[0][j]][y + i * m[1][j]].getPiece().getPlayer() != board[x][y].getPiece().getPlayer())
-						{
-							moves.add(new Kill((x + i * m[0][j]) * 8 + (y + i * m[1][j])));
-							flags[j] = false;
-						}
-						else
-						{
-							flags[j] = false;
+							flag = false;
 						}
 					}
+					else
+					{
+						flag = false;
+					}
+				}
+				else
+				{
+					flag = false;
 				}
 			}
 		}
-
-		return moves;
+		return a;
 	}
+
 }

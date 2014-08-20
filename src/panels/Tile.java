@@ -11,12 +11,11 @@ import java.awt.event.MouseListener;
 
 public class Tile extends JPanel
 {
-
 	private Color highlighted;
 	private int num;
 	private Piece piece;
 
-	public Tile(Dimension size, Point loc, final Board b, final int num)
+	public Tile(Dimension size, Point loc, final int num, Piece p)
 	{
 		super();
 		setSize(size);
@@ -25,6 +24,7 @@ public class Tile extends JPanel
 
 		this.num = num;
 		highlighted = null;
+		piece = p;
 		addMouseListener(new MouseListener()
 		{
 			@Override
@@ -105,6 +105,13 @@ public class Tile extends JPanel
 		g2.setColor(Color.yellow);
 		g2.drawString("" + num, 20, 20);
 	}
+
+	public char[] getCode()
+	{
+		char[] c = {(char) ((num % 8) + 65), (char) (num / 8+49)};
+		return c;
+	}
+
 
 	public boolean isEmpty()
 	{

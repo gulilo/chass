@@ -1,28 +1,27 @@
 package moves;
 
+import panels.Board;
 import panels.Tile;
 
 public abstract class Move
 {
-	protected int num;
+	protected int from,to;
 
-	public Move(int num)
+	public Move(int from, int to)
 	{
-		this.num = num;
+		this.from = from;
+		this.to = to;
 	}
 
 	public abstract void doit(Tile[][] board, int from, int to);
 
-	public int getNum()
+	public int getTo()
 	{
-		return num;
+		return to;
 	}
 
-	@Override
-	public String toString()
+	public String getCode(Tile[][] board)
 	{
-		return getClass().getSimpleName()+"{" +
-				"num=" + num +
-				'}';
+		return ""+Board.getTile(to,board).getCode()[0]+Board.getTile(to,board).getCode()[1];
 	}
 }

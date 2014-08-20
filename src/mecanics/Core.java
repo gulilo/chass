@@ -27,6 +27,11 @@ public class Core
 		update();
 	}
 
+	public void gameOver()
+	{
+		//TODO make gameover
+	}
+
 	public void update()
 	{
 		screen.repaint();

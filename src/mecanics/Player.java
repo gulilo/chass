@@ -10,6 +10,7 @@ public class Player
 	private ArrayList<Piece> pieces;
 	private ArrayList<Piece> deads;
 	private int num;
+	private boolean check;
 
 	public Player(int num)
 	{
@@ -24,7 +25,7 @@ public class Player
 		deads.add(p);
 	}
 
-	public void start(Tile[][] board)
+	/*public void start(Tile[][] board)
 	{
 		Piece[][] p = {{new Rook(this), new Knight(this), new Bishop(this), new King(this), new Queen(this), new Bishop(this), new Knight(this), new Rook(this)}, {new Pawn(this), new Pawn(this), new Pawn(this), new Pawn(this), new Pawn(this), new Pawn(this), new Pawn(this), new Pawn(this)}};
 		if(num==0)
@@ -49,7 +50,7 @@ public class Player
 				}
 			}
 		}
-	}
+	}*/
 
 	public ArrayList<Piece> getPieces()
 	{
@@ -64,5 +65,20 @@ public class Player
 	public int getNum()
 	{
 		return num;
+	}
+
+	public void setPieces(ArrayList<Piece> pieces)
+	{
+		this.pieces = pieces;
+	}
+
+	public boolean isCheck()
+	{
+		return check;
+	}
+
+	public void setCheck(boolean check)
+	{
+		this.check = check;
 	}
 }

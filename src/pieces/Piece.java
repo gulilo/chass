@@ -20,9 +20,12 @@ public abstract class Piece
 	protected Image image;
 	protected Player player;
 	protected boolean moved;
+	protected int loc;
+	protected char code;
 
-	public Piece(Player p)
+	public Piece(Player p, int loc)
 	{
+		this.loc = loc;
 		moved = false;
 		player = p;
 		try
@@ -56,19 +59,16 @@ public abstract class Piece
 		return Toolkit.getDefaultToolkit().createImage(ip);
 	}
 
-	public abstract ArrayList<Move> getMoves(int from, Tile[][] board);
+	public abstract ArrayList<Move> getMoves(Tile[][] board);
 
-	protected boolean isinside(int x, int y, int boardSize)
+	protected boolean isInside(int x, int y, int boardSize)
 	{
-		//System.out.print(x+"   "+y);
-		boolean b = x >= 0 && x < boardSize && y >= 0 && y < boardSize;
-		//System.out.println("  "+b);
-		return b;
+		return  x >= 0 && x < boardSize && y >= 0 && y < boardSize;
 	}
 
 	protected boolean canMove(Tile[][] board, int to)
 	{
-		return board[to/8][to%8].isEmpty() || board[to/8][to%8].getPiece().getPlayer() != player || board[to/8][to%8].getPiece()!= this;
+		return board[to/8][to%8].isEmpty() || board[to/8][to%8].getPiece().getPlayer() != player;
 	}
 
 	public Image getImage()
@@ -86,8 +86,20 @@ public abstract class Piece
 		return moved;
 	}
 
-	public void move()
+	public int getLoc()
 	{
+		return loc;
+	}
+
+	public void move(int loc)
+	{
+		this.loc = loc;
 		moved = true;
 	}
+
+	public char getCode()
+	{
+		return code;
+	}
+
 }
