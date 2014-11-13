@@ -1,39 +1,26 @@
 package moves;
 
-import panels.Board;
+import mecanics.Core;
 import panels.Tile;
+import pieces.Piece;
 
 public class Check extends Move
 {
-
-	public Check(int from, int to)
+	public Check(Move m)
 	{
-		super(from, to);
+		super(m);
 	}
 
 	@Override
-	public void doit(Tile[][] board, int from, int to)
+	public void doit(Piece[][] board)
 	{
-		//TODO find better way
-		Board.getTile(from,board).getPiece().getPlayer().setCheck(true);
-		if(board[to/8][to%8].isEmpty())
-		{
-			board[from/8][from%8].getPiece().move(to);
-			board[to/8][to%8].setPiece(board[from/8][from%8].getPiece());
-			board[from/8][from%8].setPiece(null);
-		}
-		else
-		{
-			board[to/8][to%8].getPiece().getPlayer().kill(board[to/8][to%8].getPiece());
-			board[from/8][from%8].getPiece().move(to);
-			board[to/8][to%8].setPiece(board[from/8][from%8].getPiece());
-			board[from/8][from%8].setPiece(null);
-		}
+		Core.api.getOtherPlayer().setCheck(true);
+		board[from / 8][from % 8].move(to, board);
 	}
 
 	@Override
 	public String getCode(Tile[][] board)
 	{
-		return super.getCode(board)+'+';
+		return super.getCode(board) + '+';
 	}
 }

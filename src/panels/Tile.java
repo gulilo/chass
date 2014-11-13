@@ -15,9 +15,14 @@ public class Tile extends JPanel
 	private int num;
 	private Piece piece;
 
-	public Tile(Dimension size, Point loc, final int num, Piece p)
+	public Tile(Dimension size, Point loc, int num, Piece p)
 	{
 		super();
+		init(size, loc, num, p);
+	}
+
+	private void init(Dimension size, Point loc, final int num, Piece p)
+	{
 		setSize(size);
 		setLocation(loc);
 		setLayout(null);
@@ -90,14 +95,14 @@ public class Tile extends JPanel
 			if(piece.getImage() == null)
 			{
 				g2.setColor(Color.GREEN);
-				g2.fillRect(0, 0, getSize().width, getSize().height);
+				g2.fillRect(0, 0, 50, 50);
 			}
 			else
 			{
 				g2.drawImage(piece.getImage(), 0, 0, getSize().width, getSize().height, null);
 			}
 		}
-		if(num == Core.api.getSelected())
+		if(piece != null && piece == Core.api.getSelected())
 		{
 			g2.setColor(Color.CYAN);
 			g2.drawRect(0, 0, getSize().width - 1, getSize().height - 1);
@@ -108,14 +113,7 @@ public class Tile extends JPanel
 
 	public char[] getCode()
 	{
-		char[] c = {(char) ((num % 8) + 65), (char) (num / 8+49)};
-		return c;
-	}
-
-
-	public boolean isEmpty()
-	{
-		return piece == null;
+		return new char[]{(char) ((num % 8) + 65), (char) (num / 8 + 49)};
 	}
 
 	public Piece getPiece()

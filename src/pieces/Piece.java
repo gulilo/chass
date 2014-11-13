@@ -1,8 +1,8 @@
 package pieces;
 
 import mecanics.Player;
-import moves.Move;
-import panels.Tile;
+import moves.*;
+import panels.Board;
 import resorsces.Colors;
 
 import javax.imageio.ImageIO;
@@ -14,8 +14,10 @@ import java.awt.image.RGBImageFilter;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.ListIterator;
 
-public abstract class Piece
+public abstract class Piece implements Cloneable
 {
 	protected Image image;
 	protected Player player;
@@ -25,20 +27,12 @@ public abstract class Piece
 
 	public Piece(Player p, int loc)
 	{
-		this.loc = loc;
-		moved = false;
-		player = p;
-		try
-		{
-			image = ImageIO.read(new File("pic//" + getClass().getSimpleName() + ".png"));
-			image = changeColor(image, Color.WHITE, new Color(0, 0, 0, 0));
-			image = changeColor(image, new Color(190, 190, 190), p.getNum() % 2 == 0 ? Colors.PIECE_WHITE : Colors.PIECE_BLACK);
-		}
-		catch(IOException e)
-		{
-			System.err.println("cant read image");
-			image = null;
-		}
+		init(p, loc);
+	}
+
+	public Piece(Piece p)
+	{
+		init(p.getPlayer(), p.getLoc());
 	}
 
 	public static Image changeColor(Image image, final Color from, final Color to)
@@ -59,16 +53,100 @@ public abstract class Piece
 		return Toolkit.getDefaultToolkit().createImage(ip);
 	}
 
-	public abstract ArrayList<Move> getMoves(Tile[][] board);
+	private void init(Player p, int loc)
+	{
+		this.loc = loc;
+		moved = false;
+		player = p;
+		try
+		{
+			image = ImageIO.read(new File("pic//" + getClass().getSimpleName() + ".png"));
+			image = changeColor(image, Color.WHITE, new Color(0, 0, 0, 0));
+			image = changeColor(image, new Color(190, 190, 190), p.getNum() % 2 == 0 ? Colors.PIECE_WHITE : Colors.PIECE_BLACK);
+		}
+		catch(IOException e)
+		{
+			System.err.println("cant read image");
+			image = null;
+		}
+	}
+
+	public ArrayList<Move> getMoves(Piece[][] board)
+	{
+		ArrayList<Move> moves = new ArrayList<Move>();
+		ArrayList<Integer> a = getTilesNumbers(board, loc);
+		if(player.isCheck())
+		{
+			for(Integer i : a)
+			{
+				if(!isCheck(board, new PieceMove(loc, i)))
+				{
+					moves.add(new CheckClear(loc, i));
+				}
+			}
+		}
+		else
+		{
+			for(Integer i : a)
+			{
+				if(board[i / 8][i % 8] != null)
+				{
+					moves.add(new Kill(loc, i));
+				}
+				else
+				{
+					moves.add(new PieceMove(loc, i));
+				}
+			}
+			try
+			{
+				ListIterator<Move> iter = moves.listIterator();
+				while(iter.hasNext())
+				{
+					Move m = iter.next();
+					if(isCheck(board, m))
+					{
+						iter.remove();
+						iter.add(new Check(m));
+					}
+				}
+
+
+				/*ArrayList<Move> removes = new ArrayList<Move>();
+				for(Move m : moves)
+				{
+					if(isCheck(board, m))
+					{
+						moves.add(new Check(m));
+						removes.add(m);
+					}
+				}
+				moves.removeAll(removes);*/
+			}
+			catch(ConcurrentModificationException e)
+			{
+				System.err.println("something");
+			}
+		}
+		return moves;
+	}
+
+	protected boolean isCheck(Piece[][] board, Move m)
+	{
+		Piece[][] temp = Board.doMove(board, m);
+		return Board.isCheck(temp);
+	}
+
+	public abstract ArrayList<Integer> getTilesNumbers(Piece[][] board, int num);
 
 	protected boolean isInside(int x, int y, int boardSize)
 	{
-		return  x >= 0 && x < boardSize && y >= 0 && y < boardSize;
+		return x >= 0 && x < boardSize && y >= 0 && y < boardSize;
 	}
 
-	protected boolean canMove(Tile[][] board, int to)
+	protected boolean canMove(Piece[][] board, int to)
 	{
-		return board[to/8][to%8].isEmpty() || board[to/8][to%8].getPiece().getPlayer() != player;
+		return board[to / 8][to % 8] == null || board[to / 8][to % 8].getPlayer() != player;
 	}
 
 	public Image getImage()
@@ -81,19 +159,20 @@ public abstract class Piece
 		return player;
 	}
 
-	public boolean isMoved()
-	{
-		return moved;
-	}
-
 	public int getLoc()
 	{
 		return loc;
 	}
 
-	public void move(int loc)
+	public void move(int newLoc, Piece[][] board)
 	{
-		this.loc = loc;
+		board[loc / 8][loc % 8] = null;
+		if(board[newLoc / 8][newLoc % 8] != null)
+		{
+			board[newLoc / 8][newLoc % 8].getPlayer().kill(board[newLoc / 8][newLoc % 8]);
+		}
+		board[newLoc / 8][newLoc % 8] = this;
+		loc = newLoc;
 		moved = true;
 	}
 
@@ -101,5 +180,19 @@ public abstract class Piece
 	{
 		return code;
 	}
+
+	public Piece clone()
+	{
+		try
+		{
+			return (Piece) super.clone();
+		}
+		catch(CloneNotSupportedException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 
 }

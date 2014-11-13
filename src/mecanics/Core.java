@@ -3,6 +3,7 @@ package mecanics;
 import panels.Board;
 import resorsces.API;
 
+import javax.swing.*;
 import java.awt.*;
 
 public class Core
@@ -10,31 +11,30 @@ public class Core
 	public static API api;
 
 	private Player[] players;
-	private Screen screen;
+	private JPanel p;
 
-	public Core()
+	public Core(JPanel p, Dimension size, Point loc)
 	{
-		screen = new Screen();
-		screen.open();
+		this.p = p;
 		players = new Player[2];
 		players[0] = new Player(0);
 		players[1] = new Player(1);
 		System.out.println("turn White");
-		int tileSize = (int) Math.sqrt((screen.getSize().width * screen.getSize().height * 6) / 10) / 8;
-		Board board = new Board(new Dimension(tileSize * 8 + 50, tileSize * 8 + 50), new Point(10, 10), tileSize, players);
+		int tileSize = (int) Math.sqrt(size.width * size.height) / 8;
+		Board board = new Board(size, loc, tileSize, players);
 		api = new API(board, this);
-		screen.getContentPane().add(board);
+		p.add(board);
 		update();
 	}
 
 	public void gameOver()
 	{
-		//TODO make gameover
+		System.out.println("done!");
 	}
 
 	public void update()
 	{
-		screen.repaint();
+		p.repaint();
 	}
 
 	public Player[] getPlayers()

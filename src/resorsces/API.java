@@ -7,12 +7,14 @@ import moves.Move;
 import panels.Board;
 import pieces.Piece;
 
+import java.util.ArrayList;
+
 public class API
 {
 	private int turn;
 	private Board board;
 	private Core core;
-	private int selected;
+	private Piece selected;
 	private String log;
 
 
@@ -21,42 +23,50 @@ public class API
 		turn = 0;
 		this.board = board;
 		this.core = core;
-		selected = -1;
+		selected = null;
 		log = "";
 	}
 
 	public void click(int num)
 	{
-		if(selected < 0)
+		Piece p = Board.getPiece(num, board.getPieces(board.getBoard()));
+		if(p != null && p.getPlayer().getNum() == turn && selected == null)
 		{
-			if(board.getPiece(num) != null && board.getPiece(num).getPlayer() == core.getPlayers()[turn])
+			selected = p;
+		}
+		else if(selected != null && selected.getPlayer().getNum() == turn && selected != p)
+		{
+			ArrayList<Move> moves = selected.getMoves(board.getPieces(board.getBoard()));
+			for(Move m : moves)
 			{
-				selected = num;
+				if(m.getTo() == num)
+				{
+					board.movePiece(board.getPieces(board.getBoard()), m);
+					selected = null;
+					nextTurn();
+					if(isGameOver())
+					{
+						core.gameOver();
+					}
+				}
 			}
 		}
 		else
 		{
-			if(board.movePiece(selected, num))
-			{
-				nextTurn();
-			}
-			selected = -1;
-			if(isGameOver())
-			{
-				core.gameOver();
-			}
+			selected = null;
 		}
 		board.highlight(selected);
 		core.update();
+
 	}
 
 	private boolean isGameOver()
 	{
 		if(core.getPlayers()[turn].isCheck())
 		{
-			for(Piece piece:core.getPlayers()[turn].getPieces())
+			for(Piece piece : core.getPlayers()[turn].getPieces())
 			{
-				if(!piece.getMoves(board.getBoard()).isEmpty())
+				if(!piece.getTilesNumbers(board.getPieces(board.getBoard()),piece.getLoc()).isEmpty())
 				{
 					return false;
 				}
@@ -74,7 +84,7 @@ public class API
 	}
 
 
-	public int getSelected()
+	public Piece getSelected()
 	{
 		return selected;
 	}
@@ -85,17 +95,27 @@ public class API
 		String s = "";
 		if(move instanceof Castling)
 		{
-			s+= "0-0";
+			s += "0-0";
 		}
 		else
 		{
-			s += "" + p.getCode() +move.getCode(board.getBoard()) + '\n';
+			s += "" + p.getCode() + move.getCode(board.getBoard()) + '\n';
 		}
-		log+=s;
+		log += s;
 	}
 
 	public String getLog()
 	{
 		return log;
+	}
+
+	public Player getCorrentPlayer()
+	{
+		return core.getPlayers()[turn];
+	}
+
+	public Player getOtherPlayer()
+	{
+		return core.getPlayers()[(turn + 1) % 2];
 	}
 }

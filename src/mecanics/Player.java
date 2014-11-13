@@ -1,7 +1,6 @@
 package mecanics;
 
-import panels.Tile;
-import pieces.*;
+import pieces.Piece;
 
 import java.util.ArrayList;
 
@@ -17,6 +16,7 @@ public class Player
 		this.num = num;
 		pieces = new ArrayList<Piece>();
 		deads = new ArrayList<Piece>();
+		check = false;
 	}
 
 	public void kill(Piece p)

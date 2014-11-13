@@ -1,11 +1,7 @@
 package pieces;
 
 import mecanics.Player;
-import moves.Castling;
-import moves.Kill;
-import moves.Move;
 import moves.PieceMove;
-import panels.Tile;
 
 import java.util.ArrayList;
 
@@ -19,39 +15,29 @@ public class King extends Piece
 	}
 
 	@Override
-	public ArrayList<Move> getMoves(Tile[][] board)
+	public ArrayList<Integer> getTilesNumbers(Piece[][] board, int num)
 	{
-		ArrayList<Move> moves = new ArrayList<Move>();
+		ArrayList<Integer> a = new ArrayList<Integer>();
 
-		int x = loc/8;
-		int y = loc%8;
+		int x = num / 8;
+		int y = num % 8;
 
-		for(int i = -1;i<2;i++)
+		for(int i = x - 1; i <= x + 1; i++)
 		{
-			for(int j = -1;j<2;j++)
+			for(int j = y - 1; j <= y + 1; j++)
 			{
-				if(isInside(x + i, y + j, 8))
+				if(isInside(i, j, 8))
 				{
-					if(board[x+i][y+j].isEmpty())
+					if(canMove(board, i * 8 + j))
 					{
-						moves.add(new PieceMove(loc,(x+i)*8+(y+j)));
-					}
-					else if(board[x+i][y+j].getPiece().getPlayer() != board[x][y].getPiece().getPlayer())
-					{
-						moves.add(new Kill(loc,(x+i)*8+(y+j)));
+						if(!isCheck(board, new PieceMove(loc, i * 8 + j)))
+						{
+							a.add(i * 8 + j);
+						}
 					}
 				}
 			}
 		}
-
-		if(!board[x][y].getPiece().isMoved() && !board[x][y+3].isEmpty() && !board[x][y+3].getPiece().isMoved() && board[x][y+1].isEmpty() && board[x][y+2].isEmpty())
-		{
-			moves.add(new Castling(loc,62));
-		}
-		if(!board[x][y].getPiece().isMoved() && !board[x][y-4].isEmpty() && !board[x][y-4].getPiece().isMoved() && board[x][y-1].isEmpty() && board[x][y-2].isEmpty() && board[x][y-3].isEmpty())
-		{
-			moves.add(new Castling(loc,58));
-		}
-		return moves;
+		return a;
 	}
 }
