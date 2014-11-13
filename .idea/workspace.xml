@@ -1,26 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="721556fe-6d67-4a13-bb78-2c7a9ac02fa4" name="Default" comment="redone all movement system">
+    <list default="true" id="721556fe-6d67-4a13-bb78-2c7a9ac02fa4" name="Default" comment="">
       <change type="DELETED" beforePath="D:\Projects\chess\.idea\copyright\profiles_settings.xml" afterPath="" />
       <change type="DELETED" beforePath="D:\Projects\chess\.idea\dictionaries\gulilo.xml" afterPath="" />
       <change type="DELETED" beforePath="D:\Projects\chess\.idea\inspectionProfiles\Project_Default.xml" afterPath="" />
       <change type="DELETED" beforePath="D:\Projects\chess\.idea\inspectionProfiles\profiles_settings.xml" afterPath="" />
       <change type="DELETED" beforePath="D:\Projects\chess\.idea\scopes\scope_settings.xml" afterPath="" />
       <change type="DELETED" beforePath="D:\Projects\chess\.idea\workspace.xml" afterPath="" />
-      <change type="DELETED" beforePath="D:\Projects\chess\README.md" afterPath="" />
-      <change type="DELETED" beforePath="D:\Projects\chess\chass.iml" afterPath="" />
-      <change type="DELETED" beforePath="D:\Projects\chess\out\production\chass\Bishop.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Projects\chess\out\production\chass\Board.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Projects\chess\out\production\chass\ContentPane.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Projects\chess\out\production\chass\Piece.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Projects\chess\out\production\chass\Screen$1.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Projects\chess\out\production\chass\Screen$2.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Projects\chess\out\production\chass\Screen.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Projects\chess\out\production\chass\Tile$1.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Projects\chess\out\production\chass\Tile$2.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Projects\chess\out\production\chass\Tile.class" afterPath="" />
-      <change type="DELETED" beforePath="D:\Projects\chess\out\production\chass\ma.class" afterPath="" />
     </list>
     <ignored path="chass.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -740,7 +727,13 @@
       <option name="project" value="LOCAL" />
       <updated>1415888525809</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="redone all movement system">
+      <created>1415888671940</created>
+      <option name="number" value="00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1415888671940</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
